@@ -12,7 +12,7 @@ using std::endl;
 using std::string;
 using std::vector;
 
-#include "round.h"
+#include "game.h"
 
 extern Game  game;
 
