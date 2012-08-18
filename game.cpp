@@ -1,18 +1,18 @@
 #include "vars.h"
 
-Game::Game( )
+Game::Game()
 {
-	this->player = new Player;
-	this->dealer = new Dealer;
-	this->cpu1	 = new AI;
-	this->cpu2	 = new AI;
-	this->cpu3	 = new AI;
-	this->cpu4	 = new AI;
+	player	 = new Player;
+	dealer	 = new Dealer;
+	cpu1	 = new AI;
+	cpu2	 = new AI;
+	cpu3	 = new AI;
+	cpu4	 = new AI;
 
-	this->Init( );
+	Init();
 }
 
-Game::~Game( void )
+Game::~Game(void)
 {
 	delete player;
 	delete dealer;
@@ -22,7 +22,7 @@ Game::~Game( void )
 	delete cpu4;
 }
 
-void Game::CleanUp( )
+void Game::CleanUp()
 {
 	delete player;
 	delete dealer;
@@ -32,202 +32,231 @@ void Game::CleanUp( )
 	delete cpu4;
 }
 
-void Game::Init( void )
+void Game::Init()
 {
-	this->endOfRound	= false;
-	this->endOfGame		= false;
-	this->flop			= false;
-	this->turn			= false;
-	this->river			= false;
-	this->bettingRound  = true;
-	this->currentPlayer = PLAYER;
-	this->lastAction	= 0;
-	this->playersLeft   = 5;
+	endOfRound		= false;
+	endOfGame		= false;
+	flop			= false;
+	turn			= false;
+	river			= false;
+	bettingRound	= true;
+	currentPlayer	= PLAYER;
+	lastAction		= 0;
+	playersLeft		= 5;
 
-	this->cpu.clear( );
+	cpu.clear();
 
-	this->cpu.push_back( this->cpu1 );
-	this->cpu.push_back( this->cpu2 );
-	this->cpu.push_back( this->cpu3 );
-	this->cpu.push_back( this->cpu4 );
+	cpu.push_back(cpu1);
+	cpu.push_back(cpu2);
+	cpu.push_back(cpu3);
+	cpu.push_back(cpu4);
 
-	this->ReturnAIObject( CPU1 )->SetPlayerName( "Mandy" );
-	this->ReturnAIObject( CPU2 )->SetPlayerName( "Joe" );
-	this->ReturnAIObject( CPU3 )->SetPlayerName( "George" );
-	this->ReturnAIObject( CPU4 )->SetPlayerName( "Mustaffa!" );
+	cpu1->SetName("Mandy");
+	cpu2->SetName("Joe");
+	cpu3->SetName("George");
+	cpu4->SetName("Mustaffa!");
 
 	cout << "Enter your player name: ";
 	
 	string nameInput;
 	cin  >> nameInput;
-	this->ReturnPlayerObject( )->SetPlayerName( nameInput );
+	player->SetName(nameInput);
+	system("cls");
 }
 
-void Game::Interface( )
+void Game::Interface()
+{
+	system("cls");
+
+	cout << endl << endl << endl << endl;
+	if (game.GetCurrentPlayer() == CPU1)
+	{
+		cout << "	-" << cpu1->ShowName() << "-" << "    |     *" << cpu2->ShowName() << "*" << "      |    *" << cpu3->ShowName() << "*" << "    |    *" << cpu4->ShowName() << "*" << endl;
+	}
+	else if (game.GetCurrentPlayer() == CPU2)
+	{
+		cout << "	*" << cpu1->ShowName() << "*" << "    |     -" << cpu2->ShowName() << "-" << "      |    *" << cpu3->ShowName() << "*" << "    |    *" << cpu4->ShowName() << "*" << endl;
+	}
+	else if (game.GetCurrentPlayer() == CPU3)
+	{
+		cout << "	*" << cpu1->ShowName() << "*" << "    |     *" << cpu2->ShowName() << "*" << "      |    -" << cpu3->ShowName() << "-" << "    |    *" << cpu4->ShowName() << "*" << endl;
+	}
+	else if (game.GetCurrentPlayer() == CPU4)
+	{
+		cout << "	*" << cpu1->ShowName() << "*" << "    |     *" << cpu2->ShowName() << "*" << "      |    *" << cpu3->ShowName() << "*" << "    |    -" << cpu4->ShowName() << "-" << endl;
+	}
+	else
+	{
+		cout << "	*" << cpu1->ShowName() << "*" << "    |     *" << cpu2->ShowName() << "*" << "      |    *" << cpu3->ShowName() << "*" << "    |    *" << cpu4->ShowName() << "*" << endl;
+	}
+	cout << "       Hand: "; cpu1->AI_ShowCardsHidden(); cout << "  |   Hand: "; cpu2->AI_ShowCardsHidden(); cout << "   |   Hand: "; cpu3->AI_ShowCardsHidden(); cout << "   |   Hand: "; cpu4->AI_ShowCardsHidden(); cout << endl;
+	cpu1->ShowMoney(); cpu2->ShowMoney(CPU2);  cpu3->ShowMoney(CPU3); cpu4->ShowMoney(CPU4); cout << endl;
+}
+
+void Game::UpdateInterface()
 {
 }
 
-void Game::UpdateInterface( )
+int Game::GetCurrentPlayer()
 {
+	return currentPlayer;
 }
 
-int Game::GetCurrentPlayer( void )
+int Game::GetLastAction()
 {
-	return this->currentPlayer;
+	return lastAction;
 }
 
-int Game::GetLastAction( )
+void Game::SetLastAction(int action)
 {
-	return this->lastAction;
+	lastAction = action;
 }
 
-void Game::SetLastAction( int action )
+long Game::GetCurrentBet()
 {
-	this->lastAction = action;
+	return currentBet;
 }
 
-long Game::GetCurrentBet( )
+void Game::SetCurrentBet(int amount)
 {
-	return this->currentBet;
+	currentBet = amount;
 }
 
-void Game::SetCurrentBet( int amount )
+long Game::GetCurrentPot()
 {
-	this->currentBet = amount;
+	return currentPot;
 }
 
-long Game::GetCurrentPot( )
+void Game::SetCurrentPot(int amount)
 {
-	return this->currentPot;
+	currentPot += amount;
 }
 
-void Game::SetCurrentPot( int amount )
+bool Game::IsFlop(void)
 {
-	this->currentPot += amount;
+	return flop;
 }
 
-bool Game::IsFlop( void )
+bool Game::IsTurn()
 {
-	return this->flop;
+	return turn;
 }
 
-bool Game::IsTurn( )
+bool Game::IsRiver()
 {
-	return this->turn;
+	return river;
 }
 
-bool Game::IsRiver( )
+bool Game::IsBettingRound()
 {
-	return this->river;
+	return bettingRound;
 }
 
-bool Game::IsBettingRound( )
+void Game::SetFlop(bool isFlop)
 {
-	return this->bettingRound;
+	flop = isFlop;
 }
 
-void Game::SetFlop( bool isFlop )
+void Game::SetTurn(bool isTurn)
 {
-	this->flop = isFlop;
+	turn = isTurn;
 }
 
-void Game::SetTurn( bool isTurn )
+void Game::SetRiver(bool isRiver)
 {
-	this->turn = isTurn;
+	river = isRiver;
 }
 
-void Game::SetRiver( bool isRiver )
+void Game::SetBettingRound(bool isBettingRound)
 {
-	this->river = isRiver;
-}
-
-void Game::SetBettingRound( bool isBettingRound )
-{
-	this->bettingRound = isBettingRound;
+	bettingRound = isBettingRound;
 }
 
 void Game::Start( )
 {
 
-	this->ReturnDealerObject( )->Shuffle( );
-	this->ReturnDealerObject( )->Deal( );
+	dealer->Shuffle();
+	dealer->Deal();
 
 	// While it is not the end of the round check 
 	// currentPlayer to determine who has the next move.
 
-	game.ChangeCurrentPlayer( PLAYER );
+	game.ChangeCurrentPlayer(PLAYER);
+	Interface();
 
 	while (!endOfGame)
 	{
 		while (!endOfRound)
 		{
-			switch (this->currentPlayer)
+			Interface();
+
+			switch (currentPlayer)
 			{
 			case PLAYER:
-				this->ReturnPlayerObject( )->TurnAction( );
-				game.ChangeCurrentPlayer( CPU1 );
+				player->TurnAction();
+				game.ChangeCurrentPlayer(CPU1);
 				break;
 
 			case CPU1:
-				this->ReturnAIObject( CPU1 )->AI_TurnAction( );
-				game.ChangeCurrentPlayer( CPU2 );
+				cpu1->AI_TurnAction();
+				game.ChangeCurrentPlayer(CPU2);
 				break;
 
 			case CPU2:
-				this->ReturnAIObject( CPU2 )->AI_TurnAction( );
-				game.ChangeCurrentPlayer( CPU3 );
+				cpu2->AI_TurnAction();
+				game.ChangeCurrentPlayer(CPU3);
 				break;
 
 			case CPU3:
-				this->ReturnAIObject( CPU3 )->AI_TurnAction( );
-				game.ChangeCurrentPlayer( CPU4 );
+				cpu3->AI_TurnAction();
+				game.ChangeCurrentPlayer(CPU4);
 				break;
 
 			case CPU4:
-				this->ReturnAIObject( CPU4 )->AI_TurnAction( );
-				game.ChangeCurrentPlayer( FINISHED );
+				cpu4->AI_TurnAction();
+				game.ChangeCurrentPlayer(FINISHED);
 				break;
 			}
 
 			if ( game.IsBettingRound() )
 			{
-				game.SetBettingRound( false );
+				game.SetBettingRound(false);
 			}
 
 			if ( game.GetCurrentPlayer() == FINISHED )
 			{
-				this->endOfRound = true;
-				this->currentPlayer = PLAYER;
+				endOfRound	  = true;
+				currentPlayer = PLAYER;
 			}
 		}
 
-		this->dealer->FillDeck( );
-		this->dealer->Shuffle( );
-		this->dealer->Deal( ); 
-		game.SetBettingRound( true );
+		dealer->FillDeck();
+		dealer->Shuffle();
+		dealer->Deal(); 
+		game.SetBettingRound(true);
 	}
 }
 
-void Game::End( void )
+void Game::End()
 {
 }
 
-void Game::ChangeCurrentPlayer( unsigned short nextPlayer )
+void Game::ChangeCurrentPlayer(unsigned short nextPlayer)
 {
-	this->currentPlayer = nextPlayer;
+	currentPlayer = nextPlayer;
 }
 
-Player* Game::ReturnPlayerObject( )
+Player* Game::ReturnPlayerObject()
 {
-	return this->player;
+	return player;
 }
 
-Dealer* Game::ReturnDealerObject( )
+Dealer* Game::ReturnDealerObject()
 {
-	return this->dealer;
+	return dealer;
 }
 
-AI* Game::ReturnAIObject( int cpuNum )
+AI* Game::ReturnAIObject(int cpuNum)
 {
 	// Ensure cpuNum does not exceed the amount of cpu objects
 	if (cpuNum < FINISHED)
@@ -235,19 +264,19 @@ AI* Game::ReturnAIObject( int cpuNum )
 		switch (cpuNum)
 		{
 		case CPU1:
-			return this->cpu1;
+			return cpu1;
 			break;
 
 		case CPU2:
-			return this->cpu2;
+			return cpu2;
 			break;
 
 		case CPU3:
-			return this->cpu3;
+			return cpu3;
 			break;
 
 		case CPU4:
-			return this->cpu4;
+			return cpu4;
 			break;
 		}
 	}
@@ -255,15 +284,15 @@ AI* Game::ReturnAIObject( int cpuNum )
 	{
 		cout << " cpuNum is an invalid integer. Values 1 - 4 only." << endl;
 		cout << "               Game::ReturnAIObject( )          ";
-		cin.get( );
+		cin.get();
 	}
 }
 
-int Game::ConvertCharToInt( char c )
+int Game::ConvertCharToInt(char c)
 {
 	if (c == 'A' || c == 'J' || c == 'Q' || c == 'K')
 	{
-		switch ( c )
+		switch (c)
 		{
 		case 'A':
 			return ACE;

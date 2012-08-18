@@ -4,27 +4,30 @@
 class Player
 {
 public:
-	Player( );
-	~Player( );
+	Player();
+	~Player();
 
-	void	Check( );
-	void	Call( );
-	void	Bet( );
-	void	Raise( );
-	void	Fold( );
+	void	Check();
+	void	Call();
+	void	Bet();
+	void	Raise();
+	void	Fold();
 
-	void	SetPlayerHand( string card, int handPos );
-	string	GetPlayerCard( int handPos );
-	void	ShowPlayerHand( );
-	void	SetPlayerName( string playerName );
-	string  GetPlayerName( );
-	int	    GetPlayerMoney( );
+	void	SetHand(string card, int handPos);
+	string	GetCard(int handPos);
+	void	ShowHand();
+	void	ShowInfo();
+	void	SetName(string name);
+	string  ShowName();
+	void	ShowMoney();
+	void	ShowMoney(int cpu);
+	void    SetMoney(int amount);
 
-	int		GetInputFromPlayer( );
+	int		GetInputFromPlayer();
 
-	void	TurnAction( );
-	void	SetTurn( bool turnState );
-	bool	IsTurn( );
+	void	TurnAction();
+	void	SetTurn(bool state);
+	bool	IsTurn();
 
 protected:
 	vector<string> playerHand;
@@ -40,20 +43,21 @@ private:
 class AI : public Player
 {
 public:
-	AI( );
-	~AI( );
+	AI();
+	~AI();
 
-	void	AI_TurnAction( );
-	void    Compare( );
-	void	Determine( );
-	void    ExtractCardData( vector<string>& communityDeck );
-	int		FindHighCard( );
+	void	AI_TurnAction();
+	void    Compare();
+	void	Determine();
+	void    ExtractCardData(vector<string>& communityDeck);
+	int		FindHighCard();
+	void	AI_ShowCardsHidden();
 
-	void	AI_Check( );
-	void	AI_Call( );
-	void	AI_Bet( );
-	void	AI_Raise( );
-	void	AI_Fold( );
+	void	AI_Check();
+	void	AI_Call();
+	void	AI_Bet();
+	void	AI_Raise();
+	void	AI_Fold();
 
 protected:
 private:
@@ -64,6 +68,7 @@ private:
 	vector<int>  numsInCommunity;
 
 	double		 currentRiskFactor;
+	int			 highCard;
 	bool		 risky;
 	bool		 bluffing;
 };

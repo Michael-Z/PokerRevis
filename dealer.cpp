@@ -2,242 +2,241 @@
 
 #include "vars.h"
 
-Dealer::Dealer( void )
+Dealer::Dealer()
 {
-	this->FillDeck( );
-	this->deckPos = this->deck.size( ) - 1;
-	this->communityDeck.push_back( " " );
-	this->communityDeck.push_back( " " );
-	this->communityDeck.push_back( " " );
-	this->communityDeck.push_back( " " );
-	this->communityDeck.push_back( " " );
-
+	FillDeck();
+	deckPos = deck.size() - 1;
 }
 
-Dealer::~Dealer( void )
+Dealer::~Dealer()
 {
 }
 
-void Dealer::FillDeck( void )
+void Dealer::FillDeck()
 {
-	deck.clear( );
+	deck.clear();
 
-	deck.push_back( "A-H" );
-	deck.push_back( "A-S" );
-	deck.push_back( "A-C" );
-	deck.push_back( "A-D" );
+	deck.push_back("A-H");
+	deck.push_back("A-S");
+	deck.push_back("A-C");
+	deck.push_back("A-D");
 
-	deck.push_back( "2-H" );
-	deck.push_back( "2-S" );
-	deck.push_back( "2-C" );
-	deck.push_back( "2-D" );
+	deck.push_back("2-H");
+	deck.push_back("2-S");
+	deck.push_back("2-C");
+	deck.push_back("2-D");
 
-	deck.push_back( "3-H" );
-	deck.push_back( "3-S" );
-	deck.push_back( "3-C" );
-	deck.push_back( "3-D" );
+	deck.push_back("3-H");
+	deck.push_back("3-S");
+	deck.push_back("3-C");
+	deck.push_back("3-D");
 
-	deck.push_back( "4-H" );
-	deck.push_back( "4-S" );
-	deck.push_back( "4-C" );
-	deck.push_back( "4-D" );
+	deck.push_back("4-H");
+	deck.push_back("4-S");
+	deck.push_back("4-C");
+	deck.push_back("4-D");
 
-	deck.push_back( "5-H" );
-	deck.push_back( "5-S" );
-	deck.push_back( "5-C" );
-	deck.push_back( "5-D" );
+	deck.push_back("5-H");
+	deck.push_back("5-S");
+	deck.push_back("5-C");
+	deck.push_back("5-D");
 
-	deck.push_back( "6-H" );
-	deck.push_back( "6-S" );
-	deck.push_back( "6-C" );
-	deck.push_back( "6-D" );
+	deck.push_back("6-H");
+	deck.push_back("6-S");
+	deck.push_back("6-C");
+	deck.push_back("6-D");
 
-	deck.push_back( "7-H" );
-	deck.push_back( "7-S" );
-	deck.push_back( "7-C" );
-	deck.push_back( "7-D" );
+	deck.push_back("7-H");
+	deck.push_back("7-S");
+	deck.push_back("7-C");
+	deck.push_back("7-D");
 
-	deck.push_back( "8-H" );
-	deck.push_back( "8-S" );
-	deck.push_back( "8-C" );
-	deck.push_back( "8-D" );
+	deck.push_back("8-H");
+	deck.push_back("8-S");
+	deck.push_back("8-C");
+	deck.push_back("8-D");
 
-	deck.push_back( "9-H" );
-	deck.push_back( "9-S" );
-	deck.push_back( "9-C" );
-	deck.push_back( "9-D" );
+	deck.push_back("9-H");
+	deck.push_back("9-S");
+	deck.push_back("9-C");
+	deck.push_back("9-D");
 
-	deck.push_back( "10-H" );
-	deck.push_back( "10-S" );
-	deck.push_back( "10-C" );
-	deck.push_back( "10-D" );
+	deck.push_back("10-H");
+	deck.push_back("10-S");
+	deck.push_back("10-C");
+	deck.push_back("10-D");
 
-	deck.push_back( "J-H" );
-	deck.push_back( "J-S" );
-	deck.push_back( "J-C" );
-	deck.push_back( "J-D" );
+	deck.push_back("J-H");
+	deck.push_back("J-S");
+	deck.push_back("J-C");
+	deck.push_back("J-D");
 
-	deck.push_back( "Q-H" );
-	deck.push_back( "Q-S" );
-	deck.push_back( "Q-C" );
-	deck.push_back( "Q-D" );
+	deck.push_back("Q-H");
+	deck.push_back("Q-S");
+	deck.push_back("Q-C");
+	deck.push_back("Q-D");
 
-	deck.push_back( "K-H" );
-	deck.push_back( "K-S" );
-	deck.push_back( "K-C" );
-	deck.push_back( "K-D" );
+	deck.push_back("K-H");
+	deck.push_back("K-S");
+	deck.push_back("K-C");
+	deck.push_back("K-D");
+
+	if (deckPos < 51)
+	{
+		deckPos = deck.size() - 1;
+	}
 }
 
-void Dealer::Shuffle( void )
+void Dealer::Shuffle()
 {
-	srand( time(NULL) );
-	random_shuffle( deck.begin( ), deck.end( ) );
+	srand(time(NULL));
+	random_shuffle(deck.begin(), deck.end());
 }
 
-void Dealer::Deal( void )
+void Dealer::Deal()
 {
 	// If we haven't had the flop, check for
 	// current player and deal their hand.
-	if ( !game.IsFlop() )
+	if (!game.IsFlop())
 	{
-		while ( game.GetCurrentPlayer() != FINISHED )
+		while (game.GetCurrentPlayer() != FINISHED)
 		{
-			switch ( game.GetCurrentPlayer() )
+			switch (game.GetCurrentPlayer())
 			{
 			case PLAYER:
-				this->DealToPlayer( );
-				game.ChangeCurrentPlayer( CPU1 );
+				DealToPlayer();
+				game.ChangeCurrentPlayer(CPU1);
 				break;
 
 			case CPU1:
-				this->DealToAI( game.ReturnAIObject(CPU1) );
-				game.ChangeCurrentPlayer( CPU2 );
+				DealToAI(game.ReturnAIObject(CPU1));
+				game.ChangeCurrentPlayer(CPU2);
 				break;
 
 			case CPU2:
-				this->DealToAI( game.ReturnAIObject(CPU2) );
-				game.ChangeCurrentPlayer( CPU3 );
+				DealToAI(game.ReturnAIObject(CPU2));
+				game.ChangeCurrentPlayer(CPU3);
 				break;
 
 			case CPU3:
-				this->DealToAI( game.ReturnAIObject(CPU3) );
-				game.ChangeCurrentPlayer( CPU4 );
+				DealToAI(game.ReturnAIObject(CPU3));
+				game.ChangeCurrentPlayer(CPU4);
 				break;
 
 			case CPU4:
-				this->DealToAI( game.ReturnAIObject(CPU4) );
-				game.ChangeCurrentPlayer( FINISHED );
+				DealToAI(game.ReturnAIObject(CPU4));
+				game.ChangeCurrentPlayer(FINISHED);
 				break;
 			}
 		}
 	}
-	else if ( !game.IsBettingRound() )
+	else if (!game.IsBettingRound())
 	{
-		this->DealToCommunity( );
+		this->DealToCommunity();
 	}
 }
 
-void Dealer::DealToPlayer( void )
+void Dealer::DealToPlayer()
 {
 	for (int handPos = 0; handPos < HOLE_CARDS; handPos++)
 	{	
-		string card = this->deck.at( deckPos );
-		game.ReturnPlayerObject( )->SetPlayerHand( card, handPos );
-		this->deck.pop_back( );
-		this->deckPos--;
+		string card = deck.at(deckPos);
+		game.ReturnPlayerObject()->SetHand(card, handPos);
+		deck.pop_back();
+		deckPos--;
 	}
 }
 
-void Dealer::DealToAI( AI* ai )
+void Dealer::DealToAI(AI* ai)
 {
 	for (int handPos = 0; handPos < HOLE_CARDS; handPos++)
 	{	
-		string card = this->deck.at( deckPos );
-		ai->SetPlayerHand( card, handPos );
-		this->deck.pop_back( );
-		this->deckPos--;
+		string card = deck.at(deckPos);
+		ai->SetHand(card, handPos);
+		deck.pop_back();
+		deckPos--;
 	}
 }
 
-void Dealer::DealToCommunity( void )
+void Dealer::DealToCommunity()
 {
 	string card = " ";
 
-	if ( !game.IsFlop() )
+	if (!game.IsFlop())
 	{
 		for (int comDeckPos = 0; comDeckPos < FLOP_SIZE; comDeckPos++)
 		{
-			card = this->deck.at( this->deckPos );
-			this->communityDeck.at( comDeckPos ) = card;
-			this->deck.pop_back( );
-			this->deckPos--;
+			card = deck.at(deckPos);
+			communityDeck.at(comDeckPos) = card;
+			deck.pop_back();
+			deckPos--;
 		}
 		
-		game.SetFlop( true );
+		game.SetFlop(true);
 	}
-	else if ( game.IsFlop() && !game.IsTurn() )
+	else if (game.IsFlop() && !game.IsTurn())
 	{
-		card = this->deck.at( this->deckPos );
-		this->communityDeck.at( 3 ) = card;
-		this->deck.pop_back( );
-		this->deckPos--;
+		card = deck.at(deckPos);
+		communityDeck.at(3) = card;
+		deck.pop_back();
+		deckPos--;
 
-		game.SetTurn( true );
+		game.SetTurn(true);
 	}
-	else if ( game.IsFlop() && game.IsTurn() && !game.IsRiver() )
+	else if (game.IsFlop() && game.IsTurn() && !game.IsRiver())
 	{
-		card = this->deck.at( this->deckPos );
-		this->communityDeck.at( 4 ) = card;
-		this->deck.pop_back( );
-		this->deckPos--;
+		card = deck.at(deckPos);
+		communityDeck.at(4) = card;
+		deck.pop_back();
+		deckPos--;
 
-		game.SetRiver( true );
+		game.SetRiver(true);
 	}
 
-	cin.get( );
+	cin.get();
 }
 
-int Dealer::GetDeckPos( void )
+int Dealer::GetDeckPos(void)
 {
-	return this->deckPos;
+	return deckPos;
 }
 
-string Dealer::GetCommunityCard( int communityDeckPos )
+string Dealer::GetCommunityCard(int communityDeckPos)
 {
-	if ( game.IsFlop() )
+	if (game.IsFlop())
 	{
 		switch (communityDeckPos)
 		{
 		case 1:
-			return this->communityDeck.at( 0 );
+			return communityDeck.at(0);
 			break;
 
 		case 2:
-			return this->communityDeck.at( 1 );
+			return communityDeck.at(1);
 			break;
 
 		case 3:
-			return this->communityDeck.at( 2 );
+			return communityDeck.at(2);
 			break;
 
 		case 4:
-			if ( game.IsTurn() )
+			if (game.IsTurn())
 			{
-				return this->communityDeck.at( 3 );
+				return communityDeck.at(3);
 			}
 			break;
 
 		case 5:
-			if( game.IsRiver() )
+			if(game.IsRiver())
 			{
-				return this->communityDeck.at( 4 );
+				return communityDeck.at(4);
 			}
 			break;
 		}
 	}
 }
 
-vector<string>& Dealer::GetCommunityDeck( )
+vector<string>& Dealer::GetCommunityDeck()
 {
-	return this->communityDeck;
+	return communityDeck;
 }

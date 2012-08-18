@@ -4,64 +4,186 @@
  * PLAYER DEFINITIONS *
  **********************/
 
-Player::Player( void )
+Player::Player()
 {
-	this->playState  = true;
-	this->playerName = " ";
-	this->money		 = 500;
+	playState  = true;
+	playerName = " ";
+	money		 = 500;
 
-	this->playerHand.push_back( " " );
-	this->playerHand.push_back( " " );
+	playerHand.push_back(" ");
+	playerHand.push_back(" ");
 }
 
-Player::~Player( void )
+Player::~Player()
 {
 }
 
-bool Player::IsTurn( )
+bool Player::IsTurn()
 {
-	return this->turnState;
+	return turnState;
 }
 
-void Player::SetTurn( bool turnState )
+void Player::SetTurn(bool state)
 {
-	this->turnState = turnState;
+	turnState = state;
 }
 
-void Player::SetPlayerHand( string card, int handPos )
+void Player::SetHand(string card, int handPos)
 {
-	this->playerHand.at( handPos ) = card;
+	playerHand.at(handPos) = card;
 }
 
-void Player::ShowPlayerHand( )
+void Player::ShowHand()
 {
 	for (int i = 0; i < HOLE_CARDS; i++)
 	{
-		cout << this->playerHand.at( i ) << " ";
+		cout << playerHand.at(i) << " ";
 	}
 }
 
-string Player::GetPlayerCard( int handPos )
+string Player::GetCard(int handPos)
 {
-	return this->playerHand.at( handPos );
+	return playerHand.at(handPos);
 }
 
-void Player::SetPlayerName( string playerName )
+void Player::SetName(string name)
 {
-	this->playerName = playerName;
+	playerName = name;
 }
 
-string Player::GetPlayerName( )
+string Player::ShowName()
 {
-	return this->playerName;
+	return playerName;
 }
 
-int Player::GetPlayerMoney( )
+void Player::ShowMoney()
 {
-	return this->money;
+	if (money >= 0 && money < 10)
+	{
+		cout << "      Money: ";
+		cout << money << "     |";
+	}
+	else if (money >= 10 && money < 100)
+	{
+		cout << "	      Money: ";
+		cout << money << "    |";
+	}
+	else if (money >= 100 && money < 1000)
+	{
+		cout << "	      Money: ";
+		cout << money << "   |";
+	}
+	else if (money >= 1000 && money < 10000)
+	{
+		cout << "	      Money: ";
+		cout << money << "  |";
+	}
+	else if (money >= 10000 && money < 100000)
+	{
+		cout << "	      Money: ";
+		cout << money << " |";
+	}
+	else if (money >= 100000 && money < 1000000)
+	{
+		cout << "	     Money: ";
+		cout << money << " |";
+	}
+	else if (money >= 1000000 && money < 10000000)
+	{
+		cout << "	    Money: ";
+		cout << money << " |";
+	}
 }
 
-int Player::GetInputFromPlayer( )
+void Player::ShowMoney(int cpu)
+{
+	if (cpu != CPU1)
+	{
+		if (cpu == CPU4)
+		{
+			if (money >= 0 && money < 10)
+			{
+				cout << "  Money: ";
+				cout << money << "      ";
+			}
+			else if (money >= 10 && money < 100)
+			{
+				cout << "  Money: ";
+				cout << money << "     ";
+			}
+			else if (money >= 100 && money < 1000)
+			{
+				cout << "  Money: ";
+				cout << money << "    ";
+			}
+			else if (money >= 1000 && money < 10000)
+			{
+				cout << "  Money: ";
+				cout << money << "   ";
+			}
+			else if (money >= 10000 && money < 100000)
+			{
+				cout << "  Money: ";
+				cout << money << "  ";
+			}
+			else if (money >= 100000 && money < 1000000)
+			{
+				cout << "  Money: ";
+				cout << money << " ";
+			}
+			else if (money >= 1000000 && money < 10000000)
+			{
+				cout << " Money: ";
+				cout << money << " ";
+			}
+		}
+		else
+		{
+			if (money >= 0 && money < 10)
+			{
+				cout << "  Money: ";
+				cout << money << "      |";
+			}
+			else if (money >= 10 && money < 100)
+			{
+				cout << "  Money: ";
+				cout << money << "     |";
+			}
+			else if (money >= 100 && money < 1000)
+			{
+				cout << "  Money: ";
+				cout << money << "    |";
+			}
+			else if (money >= 1000 && money < 10000)
+			{
+				cout << "  Money: ";
+				cout << money << "   |";
+			}
+			else if (money >= 10000 && money < 100000)
+			{
+				cout << "  Money: ";
+				cout << money << "  |";
+			}
+			else if (money >= 100000 && money < 1000000)
+			{
+				cout << "  Money: ";
+				cout << money << " |";
+			}
+			else if (money >= 1000000 && money < 10000000)
+			{
+				cout << " Money: ";
+				cout << money << " |";
+			}
+		}
+	}
+}
+
+void Player::SetMoney(int amount)
+{
+	money = amount;
+}
+
+int Player::GetInputFromPlayer()
 {
 	int choice;
 
@@ -71,41 +193,41 @@ int Player::GetInputFromPlayer( )
 	cout << "4 - RAISE" << endl;
 	cout << "5 - FOLD"  << endl;
 	cin  >> choice;
-	cin.ignore( );
+	cin.ignore();
 
 	return choice;
 }
 
-void Player::TurnAction( void )
+void Player::TurnAction()
 {
-	while ( this->IsTurn() )
+	while (IsTurn())
 	{
-		switch( this->GetInputFromPlayer() )
+		switch(GetInputFromPlayer())
 		{
 		case CHECK:
-			this->Check( );
+			Check();
 			break;
 
 		case CALL:
-			this->Call( );
+			Call();
 			break;
 
 		case BET:
-			this->Bet( );
+			Bet();
 			break;
 
 		case RAISE:
-			this->Raise( );
+			Raise();
 			break;
 
 		case FOLD:
-			this->Fold( );
+			Fold();
 			break;
 		}
 	}
 }
 
-void Player::Check( )
+void Player::Check()
 {
 	if ( game.GetLastAction() == CALL ||
 		 game.GetLastAction() == BET  ||
@@ -115,35 +237,35 @@ void Player::Check( )
 	}
 	else
 	{
-		game.SetLastAction( CHECK );
-		this->SetTurn( false );
+		game.SetLastAction(CHECK);
+		SetTurn(false);
 	}
 }
 
-void Player::Call( )
+void Player::Call()
 {
-	if ( game.GetLastAction() == CHECK )
+	if (game.GetLastAction() == CHECK)
 	{
 		return;
 	}
 	else
 	{
-		if ( this->money <= game.GetCurrentBet() )
+		if (money <= game.GetCurrentBet())
 		{
-			game.SetCurrentPot( game.GetCurrentBet( ) + this->money );
-			this->money = 0;
-			this->SetTurn( false );
+			game.SetCurrentPot(game.GetCurrentBet() + money);
+			money = 0;
+			SetTurn(false);
 		}
 		else
 		{
-			game.SetCurrentPot( game.GetCurrentBet( ) + game.GetCurrentBet( ) );
-			this->money -= game.GetCurrentBet( );
-			this->SetTurn( false );
+			game.SetCurrentPot(game.GetCurrentBet() + game.GetCurrentBet());
+			money -= game.GetCurrentBet();
+			SetTurn(false);
 		}
 	}
 }
 
-void Player::Bet( )
+void Player::Bet()
 {
 	if ( game.GetLastAction() == CALL ||
 		 game.GetLastAction() == BET  ||
@@ -157,19 +279,19 @@ void Player::Bet( )
 		cout << "Amount to bet: ";
 		cin  >> amount;
 
-		game.SetCurrentBet( amount );
-		game.SetCurrentPot( amount );
-		game.SetLastAction( BET );
+		game.SetCurrentBet(amount);
+		game.SetCurrentPot(amount);
+		game.SetLastAction(BET);
 
-		this->money -= amount;
+		money -= amount;
 
-		this->SetTurn( false );
+		SetTurn(false);
 	}
 }
 
-void Player::Raise( )
+void Player::Raise()
 {
-	if ( game.GetLastAction() == CHECK )
+	if (game.GetLastAction() == CHECK)
 	{
 		return;
 	}
@@ -179,160 +301,201 @@ void Player::Raise( )
 		cout << "Amount to raise: ";
 		cin  >> amount;
 
-		this->money -= game.GetCurrentBet( ) + amount;
-		game.SetCurrentBet( game.GetCurrentBet() + amount );
-		game.SetLastAction( RAISE );
+		money -= game.GetCurrentBet() + amount;
+		game.SetCurrentBet(game.GetCurrentBet() + amount);
+		game.SetLastAction(RAISE);
 
-		this->SetTurn( false );
+		SetTurn(false);
 	}
 }
 
-void Player::Fold( )
+void Player::Fold()
 {
 	for (int i = 0; i < HOLE_CARDS; i++)
 	{
-		this->playerHand.at( i ) = " ";
+		playerHand.at(i) = " ";
 	}
 	
-	this->SetTurn( false );
-	this->playState = false;
+	SetTurn(false);
+	playState = false;
 
-	game.SetLastAction( FOLD );
+	game.SetLastAction(FOLD);
 }
 
 /*******************
  *	AI DEFINITIONS *
  *******************/
 
-AI::AI( void )
+AI::AI()
 {
-	this->playerHand.push_back( " " );
-	this->playerHand.push_back( " " );
+	playerHand.push_back(" ");
+	playerHand.push_back(" ");
 
-	this->playerName = " ";
-	this->playState  = true;
-	this->risky	 = false;
+	playerName = " ";
+	playState  = true;
+	risky	   = false;
 
-	this->currentRiskFactor = 100.0;
+	currentRiskFactor = 100.0;
 }
 
-AI::~AI( void )
+AI::~AI()
 {
 }
 
-void AI::Compare( )
+void AI::AI_ShowCardsHidden()
 {
-	int highCard = this->FindHighCard( );
-
-	if ( !game.IsFlop() )
+	for (int i = 0; i < HOLE_CARDS; ++i)
 	{
-		if ( this->numsInHand.at(0) == this->numsInHand.at(1) && this->suitsInHand.at(0) == this->suitsInHand.at(1) )
+		cout << "- ";
+	}
+}
+
+void AI::Compare()
+{
+	highCard = FindHighCard();
+
+	if (!game.IsFlop())
+	{
+		if (numsInHand.at(0) == numsInHand.at(1) && suitsInHand.at(0) == suitsInHand.at(1))
 		{
-			this->currentRiskFactor -= (numberMatchBonus + suitMatchBonus / 2) + highCard;
+			currentRiskFactor -= (numberMatchBonus + suitMatchBonus) + highCard;
 		}
-		else if ( this->numsInHand.at(0) == this->numsInHand.at(1) )
+		else if (numsInHand.at(0) == numsInHand.at(1))
 		{
-			this->currentRiskFactor -= (numberMatchBonus / 2) + highCard;
+			currentRiskFactor -= numberMatchBonus + highCard;
 		}
-		else if ( this->suitsInHand.at(0) == this->suitsInHand.at(1) )
+		else if (suitsInHand.at(0) == suitsInHand.at(1))
 		{
-			this->currentRiskFactor -= (suitMatchBonus / 2) + highCard;
+			currentRiskFactor -= suitMatchBonus + highCard;
 		}
 		else
 		{
 			if (highCard > 0 && highCard <= 5)
 			{
-				this->currentRiskFactor -= 1;
+				if (numsInHand.at(0) == --numsInHand.at(1) ||
+					numsInHand.at(1) == --numsInHand.at(0))
+				{
+					currentRiskFactor -= 2;
+				}
+				else
+				{
+					currentRiskFactor -= 1;
+				}
 			}
-			else if (highCard > 5 && highCard <= 10)
+			else if (highCard > 5 && highCard <= 7)
 			{
-				this->currentRiskFactor -= 2;
+				if (numsInHand.at(0) == --numsInHand.at(1) ||
+					numsInHand.at(1) == --numsInHand.at(0))
+				{
+					currentRiskFactor -= 4;
+				}
+				else
+				{
+					currentRiskFactor -= 3;
+				}
+			}
+			else if (highCard > 7 && highCard <= 10)
+			{
+				if (numsInHand.at(0) == --numsInHand.at(1) ||
+					numsInHand.at(1) == --numsInHand.at(0))
+				{
+					currentRiskFactor -= 6;
+				}
+				else
+				{
+					currentRiskFactor -= 5;
+				}
 			}
 			else
 			{
-				this->currentRiskFactor -= 3;
+				if (numsInHand.at(0) == --numsInHand.at(1) ||
+					numsInHand.at(1) == --numsInHand.at(0))
+				{
+					currentRiskFactor -= 6;
+				}
+				currentRiskFactor -= 7;
 			}
 		}
 	}
 }
 
-void AI::ExtractCardData( vector<string>& communityDeck )
+void AI::ExtractCardData(vector<string>& communityDeck)
 {
 	char c = ' ';
 	int  cardNumber = 0;
 
-	if ( !game.IsFlop() )
+	if (!game.IsFlop())
 	{
 		for (int i = 0; i < HOLE_CARDS; i++)
 		{
-			this->suitsInHand.push_back( this->playerHand.at(i).at(2) );
-			c = this->playerHand.at( i ).at( 0 );
+			suitsInHand.push_back(playerHand.at(i).at(2));
+			c = playerHand.at(i).at(0);
 
-			cardNumber = game.ConvertCharToInt( c );
-			this->numsInHand.push_back( cardNumber );
+			cardNumber = game.ConvertCharToInt(c);
+			numsInHand.push_back(cardNumber);
 		}
 	}
-	else if ( game.IsFlop() && !game.IsTurn() )
+	else if (game.IsFlop() && !game.IsTurn())
 	{
 		for (int i = 0; i < FLOP_SIZE; i++)
 		{
-			this->suitsInCommunity.push_back( communityDeck.at(i).at(2) );
-			c = communityDeck.at( i ).at( 0 );
+			suitsInCommunity.push_back(communityDeck.at(i).at(2));
+			c = communityDeck.at(i).at(0);
 
-			cardNumber = game.ConvertCharToInt( c );
-			this->numsInCommunity.push_back( cardNumber );
+			cardNumber = game.ConvertCharToInt(c);
+			numsInCommunity.push_back(cardNumber);
 		}
 	}
-	else if ( game.IsTurn() && !game.IsRiver() )
+	else if (game.IsTurn() && !game.IsRiver())
 	{
-		this->suitsInCommunity.push_back( communityDeck.at(3).at(2) );
-		c = communityDeck.at( 3 ).at( 0 );
+		suitsInCommunity.push_back(communityDeck.at(3).at(2));
+		c = communityDeck.at(3).at(0);
 
-		cardNumber = game.ConvertCharToInt( c );
-		this->numsInCommunity.push_back( cardNumber );
+		cardNumber = game.ConvertCharToInt(c);
+		this->numsInCommunity.push_back(cardNumber);
 	}
 	else
 	{
-		this->suitsInCommunity.push_back( communityDeck.at(4).at(2) );
-		c = communityDeck.at( 4 ).at( 0 );
+		suitsInCommunity.push_back(communityDeck.at(4).at(2));
+		c = communityDeck.at(4).at(0);
 
-		cardNumber = game.ConvertCharToInt( c );
-		this->numsInCommunity.push_back( cardNumber );
+		cardNumber = game.ConvertCharToInt(c);
+		numsInCommunity.push_back(cardNumber);
 	}
 }
 
-int AI::FindHighCard( )
+int AI::FindHighCard()
 {
 	int highCard = 0;
 
-	if ( this->numsInCommunity.size() == 0 )
+	if (numsInCommunity.size() == 0)
 	{
-		if ( this->numsInHand.at(0) >= this->numsInHand.at(1) )
+		if (numsInHand.at(0) >= numsInHand.at(1))
 		{
-			highCard = this->numsInHand.at(0);
+			highCard = numsInHand.at(0);
 		}
 		else
 		{
-			highCard = this->numsInHand.at(1);
+			highCard = numsInHand.at(1);
 		}
 	}
-	else if ( this->numsInCommunity.size() > 0 )
+	else if (numsInCommunity.size() > 0)
 	{
-		for ( int i = 0; i < this->numsInHand.size(); i++)
+		for (int i = 0; i < numsInHand.size(); i++)
 		{
-			for ( int j = 0; j < this->numsInCommunity.size(); j++)
+			for (int j = 0; j < numsInCommunity.size(); j++)
 			{
-				if ( this->numsInHand.at(i) >= this->numsInCommunity.at(j) )
+				if (numsInHand.at(i) >= numsInCommunity.at(j))
 				{
-					highCard = this->numsInHand.at(i);
+					highCard = numsInHand.at(i);
 				}
 				else
 				{
-					for (int k = 0; k < this->numsInCommunity.size(); k++)
+					for (int k = 0; k < numsInCommunity.size(); k++)
 					{
-						if ( this->numsInCommunity.at(k) > highCard )
+						if (numsInCommunity.at(k) > highCard)
 						{
-							highCard = this->numsInCommunity.at(k);
+							highCard = numsInCommunity.at(k);
 						}
 					}
 				}
@@ -343,42 +506,48 @@ int AI::FindHighCard( )
 	}
 }
 
-void AI::Determine( )
+void AI::Determine()
 {
-	srand( time(NULL) );
+	srand(time(NULL));
 
-	if ( (int)this->currentRiskFactor % 2 != 0 )
+	if ((int)currentRiskFactor % 2 != 0)
 	{
-		this->risky = true;
+		if (highCard >= 7)
+		{
+			if (highCard % 2 != 0)
+			{
+				risky = true;
+			}
+		}
 	}
 
-	int	howRisky = rand( ) % 25; //Used for risky moves
+	int	howRisky = rand() % 25; //Used for risky moves
 
 	// double decisionFactor = 0.0;
 
-	if ( !game.IsFlop() )
+	if (!game.IsFlop())
 	{
-		if (this->risky)
+		if (risky)
 		{
-			if ( game.GetLastAction( ) == CALL  ||
-				 game.GetLastAction( ) == BET   ||
-				 game.GetLastAction( ) == RAISE || 
-				 game.GetLastAction( ) == FOLD )
+			if (game.GetLastAction() == CALL  ||
+				game.GetLastAction() == BET   ||
+				game.GetLastAction() == RAISE || 
+				game.GetLastAction() == FOLD)
 			{
 				if (howRisky >= 12)
 				{
-					this->AI_Raise( );
+					AI_Raise();
 					return;
 				}
 				else
 				{
-					this->AI_Call( );
+					AI_Call();
 					return;
 				}
 			}
-			else if ( game.GetLastAction( ) == CHECK )
+			else if (game.GetLastAction() == CHECK)
 			{
-				this->AI_Bet( );
+				AI_Bet();
 				return;
 			}
 		}
@@ -386,61 +555,96 @@ void AI::Determine( )
 		{
 			if (currentRiskFactor >= 98)
 			{
-				if ( game.GetLastAction( ) != CHECK )
+				if (game.GetLastAction() != CHECK && highCard <= 5)
 				{
-					this->AI_Fold( );
-					return;
+					if (howRisky <= 12)
+					{
+						AI_Fold();
+						return;
+					}
+					else if (game.GetLastAction() == CALL  ||
+							 game.GetLastAction() == BET   ||
+							 game.GetLastAction() == RAISE &&
+						     game.GetCurrentBet() != money * 0.75f)
+					{
+						AI_Call();
+						return;
+					}
 				}
 				else
 				{
-					this->AI_Check( );
+					AI_Check();
 					return;
 				}
 			}
-			else if (currentRiskFactor >= 90)
+			else if (currentRiskFactor >= 90 && currentRiskFactor < 98)
 			{
-				if ( game.GetLastAction( ) == CALL  ||
-					 game.GetLastAction( ) == RAISE ||
-					 game.GetLastAction( ) == FOLD  ||
-					 game.GetLastAction( ) == BET)
+				if (game.GetLastAction() == CALL  ||
+					game.GetLastAction() == RAISE ||
+					game.GetLastAction() == FOLD  ||
+					game.GetLastAction() == BET)
 				{
-					if ( game.GetCurrentBet( ) > this->money * 0.7f && howRisky < 12 )
+					if (howRisky < 12 && highCard <= 5)
 					{
-						this->AI_Fold( );
-						return;
+						if (game.GetCurrentBet() > money * 0.75f)
+						{
+							AI_Fold();
+							return;
+						}
 					}
 					else
 					{
-						this->AI_Call( );
-						return;
+						if (game.GetCurrentBet() > money || (highCard < 10 && howRisky <= 12))
+						{
+							AI_Fold();
+							return;
+						}
+						else
+						{
+							AI_Call();
+							return;
+						}
 					}
 				}
-				else if ( game.GetLastAction( ) == CHECK )
+				else if (game.GetLastAction() == CHECK)
 				{
-						this->AI_Check( );
+						AI_Check();
 						return;
 				}
 			}
 			else if (currentRiskFactor < 90)
 			{
-				if (currentRiskFactor > 80 && game.GetLastAction( ) == CALL  ||
-											  game.GetLastAction( ) == RAISE ||
-											  game.GetLastAction( ) == FOLD  ||
-											  game.GetLastAction( ) == BET )
+				if (currentRiskFactor > 80)
 				{
-					this->AI_Call( );
-					return;
-				}
-				else
-				{
-					if ( game.GetLastAction( ) == CHECK )
+					if (game.GetLastAction() == CALL  ||
+						game.GetLastAction() == RAISE ||
+						game.GetLastAction() == FOLD  ||
+						game.GetLastAction() == BET)
 					{
-						this->AI_Bet( );
+						AI_Call();
 						return;
 					}
 					else
 					{
-						this->AI_Raise( );
+						AI_Check();
+						return;
+					}
+				}
+				else
+				{
+					if (game.GetLastAction() == CHECK && howRisky >= 12)
+					{
+						AI_Bet();
+						return;
+					}
+					else if (currentRiskFactor <= 80 && howRisky >= 12)
+					{
+						AI_Raise();
+						return;
+					}
+					else
+					{
+						AI_Call();
 						return;
 					}
 				}
@@ -449,47 +653,74 @@ void AI::Determine( )
 	}
 }
 
-void AI::AI_TurnAction( void )
+void AI::AI_TurnAction()
 {
-	ExtractCardData( game.ReturnDealerObject()->GetCommunityDeck() );
-	Compare( );
-	Determine( );
+	ExtractCardData(game.ReturnDealerObject()->GetCommunityDeck());
+	Compare();
+	Determine();
 
-	cout << "Current Hand: " << this->playerHand.at( 0 ) << " " << this->playerHand.at( 1 ) << endl;
-	cout << "Current High Card: " << this->FindHighCard( ) << endl;
-	cout << "Current Risk Factor: " << this->currentRiskFactor;
+	cout << "Current Hand: " << playerHand.at(0) << " " << playerHand.at(1) << endl;
+	cout << "Current High Card: " << highCard << endl;
+	cout << "Current Risk Factor: " << currentRiskFactor << endl;
+	cout << "Felt risky?: ";
 
-	cin.ignore( );
-	cin.get( );
+	if (risky)
+	{
+		cout << "Yes";
+	}
+	else
+	{
+		cout << "No";
+	}
+
+	cout << endl;
+	cout << "Current Pot: " << game.GetCurrentPot() << endl;
+
+	cin.ignore();
+	cin.get();
 }
 
-void AI::AI_Check( )
+void AI::AI_Check()
 {
-	game.SetLastAction( CHECK );
-	return;
+	cout << playerName << " checks!" << endl;
+	game.SetLastAction(CHECK);
 }
 
-void AI::AI_Call( )
+void AI::AI_Call()
 {
-	cout << this->playerName << " calls!" << endl;
-	game.SetLastAction( CALL );
+	cout << playerName << " calls!" << endl;
+
+	if (game.GetCurrentBet() >= money)
+	{
+		cout << playerName << " goes all in!" << endl;
+		game.SetCurrentPot(game.GetCurrentBet() + money);
+		money = 0;
+		playState = false;
+	}
+	else
+	{
+		game.SetCurrentPot(game.GetCurrentBet() + game.GetCurrentBet());
+		money -= game.GetCurrentBet();
+
+		game.SetLastAction(CALL);
+	}
 }
 
-void AI::AI_Bet( )
+void AI::AI_Bet()
 {
-	cout << this->playerName << " bets!" << endl;
-	game.SetLastAction( BET );
+	cout << playerName << " bets!" << endl;
+	game.SetLastAction(BET);
 }
 
-void AI::AI_Raise( )
+void AI::AI_Raise()
 {
-	cout << this->playerName << " raises!" << endl;
-	game.SetLastAction( RAISE );
+	cout << playerName << " raises!" << endl;
+	game.SetLastAction(RAISE);
 }
 
-void AI::AI_Fold( )
+void AI::AI_Fold()
 {
-	cout << this->playerName << " folds!" << endl;
-	game.SetLastAction( FOLD );
+	cout << playerName << " folds!" << endl;
+	game.SetLastAction(FOLD);
 }
 

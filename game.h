@@ -7,41 +7,41 @@
 class Game
 {
 public:
-	Game( );
-	~Game( );
+	Game();
+	~Game();
 
-	void	CleanUp( );
+	void	CleanUp();
 
-	void	Interface( );
-	void	UpdateInterface( );
+	void	Interface();
+	void	UpdateInterface();
 	
-	Player* ReturnPlayerObject( );
-	Dealer* ReturnDealerObject( );
-	AI*	    ReturnAIObject( int cpuNum );
+	Player* ReturnPlayerObject();
+	Dealer* ReturnDealerObject();
+	AI*	    ReturnAIObject(int cpuNum);
 
-	void	Init( );
-	void	Start( );
-	void	End( );
+	void	Init();
+	void	Start();
+	void	End();
 
-	bool	IsFlop( );
-	bool	IsTurn( );
-	bool	IsRiver( );
-	bool    IsBettingRound( );
-	void	SetFlop( bool isFlop );
-	void	SetTurn( bool isTurn );
-	void	SetRiver( bool isRiver );
-	void    SetBettingRound( bool isBettingRound );
+	bool	IsFlop();
+	bool	IsTurn();
+	bool	IsRiver();
+	bool    IsBettingRound();
+	void	SetFlop(bool isFlop);
+	void	SetTurn(bool isTurn);
+	void	SetRiver(bool isRiver);
+	void    SetBettingRound(bool isBettingRound);
 
-	int		GetCurrentPlayer( );
-	void	ChangeCurrentPlayer( unsigned short nextPlayer );
-	int		GetLastAction( );
-	void	SetLastAction( int action );
-	long	GetCurrentBet( );
-	void	SetCurrentBet( int amount );
-	long	GetCurrentPot( );
-	void	SetCurrentPot( int amount );
+	int		GetCurrentPlayer();
+	void	ChangeCurrentPlayer(unsigned short nextPlayer);
+	int		GetLastAction();
+	void	SetLastAction(int action);
+	long	GetCurrentBet();
+	void	SetCurrentBet(int amount);
+	long	GetCurrentPot();
+	void	SetCurrentPot(int amount);
 
-	int		ConvertCharToInt( char c );
+	int		ConvertCharToInt(char c);
 
 protected:
 private:

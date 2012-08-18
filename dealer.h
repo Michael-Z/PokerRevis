@@ -6,21 +6,21 @@ class AI;
 class Dealer
 {
 public:
-	Dealer( void );
-	~Dealer( void );
+	Dealer();
+	~Dealer();
 
-	void	FillDeck( void );
-	void	Shuffle( void );
-	void	Deal( void );
+	void	FillDeck();
+	void	Shuffle();
+	void	Deal();
 
-	void	DealToPlayer( void );
-	void	DealToAI( AI* ai );
-	void	DealToCommunity( void );
+	void	DealToPlayer();
+	void	DealToAI(AI* ai);
+	void	DealToCommunity();
 
-	int		GetDeckPos( );
-	string	GetCommunityCard( int communityDeckPos );
+	int		GetDeckPos();
+	string	GetCommunityCard(int communityDeckPos);
 	
-	vector<string>&  GetCommunityDeck( );
+	vector<string>&  GetCommunityDeck();
 
 protected:
 private:
