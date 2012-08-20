@@ -103,6 +103,7 @@ void Dealer::Deal()
 		{
 			switch (game.GetCurrentPlayer())
 			{
+			case FRESH:
 			case PLAYER:
 				DealToPlayer();
 				game.ChangeCurrentPlayer(CPU1);
@@ -132,7 +133,7 @@ void Dealer::Deal()
 	}
 	else if (!game.IsBettingRound())
 	{
-		this->DealToCommunity();
+		DealToCommunity();
 	}
 }
 
@@ -164,10 +165,10 @@ void Dealer::DealToCommunity()
 
 	if (!game.IsFlop())
 	{
-		for (int comDeckPos = 0; comDeckPos < FLOP_SIZE; comDeckPos++)
+		for (int i = 0; i < FLOP_SIZE; i++)
 		{
 			card = deck.at(deckPos);
-			communityDeck.at(comDeckPos) = card;
+			communityDeck.push_back(card);
 			deck.pop_back();
 			deckPos--;
 		}
@@ -177,7 +178,7 @@ void Dealer::DealToCommunity()
 	else if (game.IsFlop() && !game.IsTurn())
 	{
 		card = deck.at(deckPos);
-		communityDeck.at(3) = card;
+		communityDeck.push_back(card);
 		deck.pop_back();
 		deckPos--;
 
@@ -186,7 +187,7 @@ void Dealer::DealToCommunity()
 	else if (game.IsFlop() && game.IsTurn() && !game.IsRiver())
 	{
 		card = deck.at(deckPos);
-		communityDeck.at(4) = card;
+		communityDeck.push_back(card);
 		deck.pop_back();
 		deckPos--;
 
@@ -239,4 +240,26 @@ string Dealer::GetCommunityCard(int communityDeckPos)
 vector<string>& Dealer::GetCommunityDeck()
 {
 	return communityDeck;
+}
+
+void Dealer::ShowCommunityCards()
+{
+	if (communityDeck.size() == 0)
+	{	
+		cout << "--- --- --- --- ---";
+		return;
+	}
+
+	if (game.IsFlop())
+	{
+		cout << communityDeck.at(0) << " " << communityDeck.at(1) << " " << communityDeck.at(2) << " --- ---";
+	}
+	else if (game.IsFlop() && !game.IsTurn())
+	{
+		cout << communityDeck.at(0) << " " << communityDeck.at(1) << " " << communityDeck.at(2) << " " << communityDeck.at(3) << " ---";
+	}
+	else if (game.IsFlop() && game.IsTurn() && !game.IsRiver())
+	{
+		cout << communityDeck.at(0) << " " << communityDeck.at(1) << " " << communityDeck.at(2) << " " << communityDeck.at(3) << " " << communityDeck.at(4);
+	}
 }

@@ -12,6 +12,7 @@ public:
 	void	FillDeck();
 	void	Shuffle();
 	void	Deal();
+	void	ShowCommunityCards();
 
 	void	DealToPlayer();
 	void	DealToAI(AI* ai);

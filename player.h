@@ -21,6 +21,7 @@ public:
 	string  ShowName();
 	void	ShowMoney();
 	void	ShowMoney(int cpu);
+	void	ShowPlayerMoney();
 	void    SetMoney(int amount);
 
 	int		GetInputFromPlayer();

@@ -40,8 +40,10 @@ void Game::Init()
 	turn			= false;
 	river			= false;
 	bettingRound	= true;
-	currentPlayer	= PLAYER;
 	lastAction		= 0;
+	currentPlayer	= FRESH;
+	currentBet		= 35;
+	currentPot		= 0;
 	playersLeft		= 5;
 
 	cpu.clear();
@@ -56,12 +58,16 @@ void Game::Init()
 	cpu3->SetName("George");
 	cpu4->SetName("Mustaffa!");
 
-	cout << "Enter your player name: ";
+	cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << "                          Enter your player name: ";
 	
 	string nameInput;
 	cin  >> nameInput;
 	player->SetName(nameInput);
 	system("cls");
+
+	dealer->Shuffle();
+	dealer->Deal();
+	Interface();
 }
 
 void Game::Interface()
@@ -91,6 +97,36 @@ void Game::Interface()
 	}
 	cout << "       Hand: "; cpu1->AI_ShowCardsHidden(); cout << "  |   Hand: "; cpu2->AI_ShowCardsHidden(); cout << "   |   Hand: "; cpu3->AI_ShowCardsHidden(); cout << "   |   Hand: "; cpu4->AI_ShowCardsHidden(); cout << endl;
 	cpu1->ShowMoney(); cpu2->ShowMoney(CPU2);  cpu3->ShowMoney(CPU3); cpu4->ShowMoney(CPU4); cout << endl;
+	cout << endl;
+	cout << endl;
+	cout << endl;
+	cout << endl;
+	cout << "                            "; dealer->ShowCommunityCards();
+	cout << endl;
+	cout << endl;
+	cout << "                              "; ShowLastAction(GetCurrentPlayer());
+	cout << endl;
+	cout << endl;
+	cout << endl;
+
+	cout << "   [1] - Check";
+	if (game.GetCurrentPlayer() == PLAYER)
+	{
+		cout << "                || -" << player->ShowName() << "- ||" << endl;
+	}
+	else
+	{
+		cout << "                || *" << player->ShowName() << "* ||" << endl;
+	}
+
+	cout << "   [2] - Call";
+	cout << "                 Hand: "; player->ShowHand(); cout << endl;
+
+	cout << "   [3] - Bet                ";
+	player->ShowPlayerMoney(); cout << endl;
+
+	cout << "   [4] - Raise" << endl;
+	cout << "   [5] - Fold" << endl;
 }
 
 void Game::UpdateInterface()
@@ -152,6 +188,156 @@ bool Game::IsBettingRound()
 	return bettingRound;
 }
 
+void Game::ShowLastAction(int player)
+{
+	if (player == FRESH)
+	{
+		cout << " ";
+	}
+	else if (player == PLAYER)
+	{
+		if (GetLastAction() == CHECK)
+		{
+			cout << this->player->ShowName() << " checks!";
+		}
+		else if (GetLastAction() == CALL)
+		{
+			cout << this->player->ShowName() << " calls!";
+		}
+		else if (GetLastAction() == BET)
+		{
+			if (!invalidCheck)
+			{
+				cout << this->player->ShowName() << " bets $" << GetCurrentBet();
+			}
+		}
+		else if (GetLastAction() == RAISE)
+		{
+			cout << this->player->ShowName() << " raises $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == FOLD)
+		{
+			cout << this->player->ShowName() << " folds!";
+		}
+		else if (GetLastAction() == ALL_IN)
+		{
+			cout << this->player->ShowName() << " goes all in!";
+		}
+	}
+	
+	else if (player == CPU1)
+	{
+		if (GetLastAction() == CHECK)
+		{
+			cout << this->cpu1->ShowName() << " checks!";
+		}
+		else if (GetLastAction() == CALL)
+		{
+			cout << this->cpu1->ShowName() << " calls!";
+		}
+		else if (GetLastAction() == BET)
+		{
+			cout << this->cpu1->ShowName() << " bets $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == RAISE)
+		{
+			cout << this->cpu1->ShowName() << " raises $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == FOLD)
+		{
+			cout << this->cpu1->ShowName() << " folds!";
+		}
+		else if (GetLastAction() == ALL_IN)
+		{
+			cout << this->cpu1->ShowName() << " goes all in!";
+		}
+	}
+
+	else if (player == CPU2)
+	{
+		if (GetLastAction() == CHECK)
+		{
+			cout << this->cpu2->ShowName() << " checks!";
+		}
+		else if (GetLastAction() == CALL)
+		{
+			cout << this->cpu2->ShowName() << " calls!";
+		}
+		else if (GetLastAction() == BET)
+		{
+			cout << this->cpu2->ShowName() << " bets $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == RAISE)
+		{
+			cout << this->cpu2->ShowName() << " raises $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == FOLD)
+		{
+			cout << this->cpu2->ShowName() << " folds!";
+		}
+		else if (GetLastAction() == ALL_IN)
+		{
+			cout << this->cpu2->ShowName() << " goes all in!";
+		}
+	}
+
+	else if (player == CPU3)
+	{
+		if (GetLastAction() == CHECK)
+		{
+			cout << this->cpu3->ShowName() << " checks!";
+		}
+		else if (GetLastAction() == CALL)
+		{
+			cout << this->cpu3->ShowName() << " calls!";
+		}
+		else if (GetLastAction() == BET)
+		{
+			cout << this->cpu3->ShowName() << " bets $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == RAISE)
+		{
+			cout << this->cpu3->ShowName() << " raises $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == FOLD)
+		{
+			cout << this->cpu3->ShowName() << " folds!";
+		}
+		else if (GetLastAction() == ALL_IN)
+		{
+			cout << this->cpu3->ShowName() << " goes all in!";
+		}
+	}
+
+	else if (player == CPU4)
+	{
+		if (GetLastAction() == CHECK)
+		{
+			cout << this->cpu4->ShowName() << " checks!";
+		}
+		else if (GetLastAction() == CALL)
+		{
+			cout << this->cpu4->ShowName() << " calls!";
+		}
+		else if (GetLastAction() == BET)
+		{
+			cout << this->cpu4->ShowName() << " bets $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == RAISE)
+		{
+			cout << this->cpu4->ShowName() << " raises $" << GetCurrentBet();
+		}
+		else if (GetLastAction() == FOLD)
+		{
+			cout << this->cpu4->ShowName() << " folds!";
+		}
+		else if (GetLastAction() == ALL_IN)
+		{
+			cout << this->cpu4->ShowName() << " goes all in!";
+		}
+	}
+}
+
 void Game::SetFlop(bool isFlop)
 {
 	flop = isFlop;
@@ -172,48 +358,55 @@ void Game::SetBettingRound(bool isBettingRound)
 	bettingRound = isBettingRound;
 }
 
+bool Game::InvalidCheck()
+{
+	return invalidCheck;
+}
+
+void Game::SetInvalidCheck(bool state)
+{
+	invalidCheck = state;
+}
+
 void Game::Start( )
 {
-
-	dealer->Shuffle();
-	dealer->Deal();
-
 	// While it is not the end of the round check 
 	// currentPlayer to determine who has the next move.
-
 	game.ChangeCurrentPlayer(PLAYER);
-	Interface();
 
 	while (!endOfGame)
 	{
 		while (!endOfRound)
 		{
-			Interface();
-
 			switch (currentPlayer)
 			{
 			case PLAYER:
 				player->TurnAction();
+				game.Interface();
 				game.ChangeCurrentPlayer(CPU1);
 				break;
 
 			case CPU1:
 				cpu1->AI_TurnAction();
+				game.Interface();
 				game.ChangeCurrentPlayer(CPU2);
 				break;
 
 			case CPU2:
 				cpu2->AI_TurnAction();
+				game.Interface();
 				game.ChangeCurrentPlayer(CPU3);
 				break;
 
 			case CPU3:
 				cpu3->AI_TurnAction();
+				game.Interface();
 				game.ChangeCurrentPlayer(CPU4);
 				break;
 
 			case CPU4:
 				cpu4->AI_TurnAction();
+				game.Interface();
 				game.ChangeCurrentPlayer(FINISHED);
 				break;
 			}
@@ -226,7 +419,7 @@ void Game::Start( )
 			if ( game.GetCurrentPlayer() == FINISHED )
 			{
 				endOfRound	  = true;
-				currentPlayer = PLAYER;
+				currentPlayer = FRESH;
 			}
 		}
 

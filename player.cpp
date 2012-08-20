@@ -65,32 +65,32 @@ void Player::ShowMoney()
 	}
 	else if (money >= 10 && money < 100)
 	{
-		cout << "	      Money: ";
+		cout << "      Money: ";
 		cout << money << "    |";
 	}
 	else if (money >= 100 && money < 1000)
 	{
-		cout << "	      Money: ";
+		cout << "      Money: ";
 		cout << money << "   |";
 	}
 	else if (money >= 1000 && money < 10000)
 	{
-		cout << "	      Money: ";
+		cout << "      Money: ";
 		cout << money << "  |";
 	}
 	else if (money >= 10000 && money < 100000)
 	{
-		cout << "	      Money: ";
+		cout << "      Money: ";
 		cout << money << " |";
 	}
 	else if (money >= 100000 && money < 1000000)
 	{
-		cout << "	     Money: ";
+		cout << "      Money: ";
 		cout << money << " |";
 	}
 	else if (money >= 1000000 && money < 10000000)
 	{
-		cout << "	    Money: ";
+		cout << "      Money: ";
 		cout << money << " |";
 	}
 }
@@ -178,6 +178,45 @@ void Player::ShowMoney(int cpu)
 	}
 }
 
+void Player::ShowPlayerMoney()
+{
+	if (money >= 0 && money < 10)
+	{
+		cout << "  Money: ";
+		cout << money << "      ";
+	}
+	else if (money >= 10 && money < 100)
+	{
+		cout << "  Money: ";
+		cout << money << "     ";
+	}
+	else if (money >= 100 && money < 1000)
+	{
+		cout << "  Money: ";
+		cout << money << "    ";
+	}
+	else if (money >= 1000 && money < 10000)
+	{
+		cout << "  Money: ";
+		cout << money << "   ";
+	}
+	else if (money >= 10000 && money < 100000)
+	{
+		cout << "  Money: ";
+		cout << money << "  ";
+	}
+	else if (money >= 100000 && money < 1000000)
+	{
+		cout << "  Money: ";
+		cout << money << " ";
+	}
+	else if (money >= 1000000 && money < 10000000)
+	{
+		cout << " Money: ";
+		cout << money << " ";
+	}
+}
+
 void Player::SetMoney(int amount)
 {
 	money = amount;
@@ -187,11 +226,8 @@ int Player::GetInputFromPlayer()
 {
 	int choice;
 
-	cout << "1 - CHECK" << endl;
-	cout << "2 - CALL"  << endl;
-	cout << "3 - BET"   << endl;
-	cout << "4 - RAISE" << endl;
-	cout << "5 - FOLD"  << endl;
+	cout << endl;
+	cout << "   Action -> ";
 	cin  >> choice;
 	cin.ignore();
 
@@ -200,6 +236,12 @@ int Player::GetInputFromPlayer()
 
 void Player::TurnAction()
 {
+	// If the player has folded or lost an all-in bet, skip.
+	if (playState == false)
+	{
+		return;
+	}
+
 	while (IsTurn())
 	{
 		switch(GetInputFromPlayer())
@@ -209,18 +251,34 @@ void Player::TurnAction()
 			break;
 
 		case CALL:
+			if (game.InvalidCheck())
+			{
+				game.SetInvalidCheck(false);
+			}
 			Call();
 			break;
 
 		case BET:
+			if (game.InvalidCheck())
+			{
+				game.SetInvalidCheck(false);
+			}
 			Bet();
 			break;
 
 		case RAISE:
+			if (game.InvalidCheck())
+			{
+				game.SetInvalidCheck(false);
+			}
 			Raise();
 			break;
 
 		case FOLD:
+			if (game.InvalidCheck())
+			{
+				game.SetInvalidCheck(false);
+			}
 			Fold();
 			break;
 		}
@@ -229,10 +287,12 @@ void Player::TurnAction()
 
 void Player::Check()
 {
-	if ( game.GetLastAction() == CALL ||
-		 game.GetLastAction() == BET  ||
-		 game.GetLastAction() == RAISE )
+	if (game.GetLastAction() == CALL ||
+		game.GetLastAction() == BET  ||
+		game.GetLastAction() == RAISE)
 	{
+		game.SetInvalidCheck(true);
+		game.Interface();
 		return;
 	}
 	else
@@ -275,8 +335,10 @@ void Player::Bet()
 	}
 	else
 	{
+		game.Interface();
 		int amount = 0;
-		cout << "Amount to bet: ";
+		cout << endl;
+		cout << "   Amount to bet -> ";
 		cin  >> amount;
 
 		game.SetCurrentBet(amount);
@@ -534,7 +596,7 @@ void AI::Determine()
 				game.GetLastAction() == RAISE || 
 				game.GetLastAction() == FOLD)
 			{
-				if (howRisky >= 12)
+				if (howRisky >= 12 && money < game.GetCurrentBet())
 				{
 					AI_Raise();
 					return;
@@ -637,7 +699,7 @@ void AI::Determine()
 						AI_Bet();
 						return;
 					}
-					else if (currentRiskFactor <= 80 && howRisky >= 12)
+					else if ((currentRiskFactor <= 80 && howRisky >= 12) && money < game.GetCurrentBet())
 					{
 						AI_Raise();
 						return;
@@ -659,7 +721,7 @@ void AI::AI_TurnAction()
 	Compare();
 	Determine();
 
-	cout << "Current Hand: " << playerHand.at(0) << " " << playerHand.at(1) << endl;
+	/*cout << "Current Hand: " << playerHand.at(0) << " " << playerHand.at(1) << endl;
 	cout << "Current High Card: " << highCard << endl;
 	cout << "Current Risk Factor: " << currentRiskFactor << endl;
 	cout << "Felt risky?: ";
@@ -674,7 +736,7 @@ void AI::AI_TurnAction()
 	}
 
 	cout << endl;
-	cout << "Current Pot: " << game.GetCurrentPot() << endl;
+	cout << "Current Pot: " << game.GetCurrentPot() << endl;*/
 
 	cin.ignore();
 	cin.get();
@@ -682,24 +744,21 @@ void AI::AI_TurnAction()
 
 void AI::AI_Check()
 {
-	cout << playerName << " checks!" << endl;
 	game.SetLastAction(CHECK);
 }
 
 void AI::AI_Call()
 {
-	cout << playerName << " calls!" << endl;
-
 	if (game.GetCurrentBet() >= money)
 	{
-		cout << playerName << " goes all in!" << endl;
-		game.SetCurrentPot(game.GetCurrentBet() + money);
+		game.SetCurrentPot(money);
 		money = 0;
-		playState = false;
+
+		game.SetLastAction(ALL_IN);
 	}
 	else
 	{
-		game.SetCurrentPot(game.GetCurrentBet() + game.GetCurrentBet());
+		game.SetCurrentPot(game.GetCurrentBet());
 		money -= game.GetCurrentBet();
 
 		game.SetLastAction(CALL);
@@ -708,19 +767,16 @@ void AI::AI_Call()
 
 void AI::AI_Bet()
 {
-	cout << playerName << " bets!" << endl;
 	game.SetLastAction(BET);
 }
 
 void AI::AI_Raise()
 {
-	cout << playerName << " raises!" << endl;
 	game.SetLastAction(RAISE);
 }
 
 void AI::AI_Fold()
 {
-	cout << playerName << " folds!" << endl;
 	game.SetLastAction(FOLD);
 }
 

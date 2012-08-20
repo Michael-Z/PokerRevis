@@ -31,6 +31,7 @@ public:
 	void	SetTurn(bool isTurn);
 	void	SetRiver(bool isRiver);
 	void    SetBettingRound(bool isBettingRound);
+	void	ShowLastAction(int player);
 
 	int		GetCurrentPlayer();
 	void	ChangeCurrentPlayer(unsigned short nextPlayer);
@@ -40,6 +41,8 @@ public:
 	void	SetCurrentBet(int amount);
 	long	GetCurrentPot();
 	void	SetCurrentPot(int amount);
+	bool	InvalidCheck();
+	void	SetInvalidCheck(bool state);
 
 	int		ConvertCharToInt(char c);
 
@@ -56,6 +59,7 @@ private:
 	bool		   turn;
 	bool		   river;
 	bool		   bettingRound;
+	bool		   invalidCheck;
 
 	Player*		   player;
 	Dealer*		   dealer;
